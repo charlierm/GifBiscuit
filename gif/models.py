@@ -31,8 +31,8 @@ class Base(models.Model):
 class Tag(models.Model):
     
     name = models.CharField(max_length=12) #TODO:12 seems like a good length? Maybe this should be read from a settings file/model... ah well, we can sort that in a future release ;)
-    foreground_colour = RGBColorField() #TODO: make sure foreground and background don't clash (using magic)
-    background_colour = RGBColorField()
+    foreground_colour = RGBColorField(blank=True) #TODO: make sure foreground and background don't clash (using magic)
+    background_colour = RGBColorField(blank=True)
     date_created = models.DateTimeField(auto_now_add=True) #Now. Might as well log this.
 
     def __init__(self, *args, **kwargs):
