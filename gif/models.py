@@ -4,8 +4,6 @@ from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 from django.contrib.auth.models import User
 import random, uuid
 
-
-
 class Base(models.Model):
     """
     Base class containing common properties and methods for models.
@@ -121,18 +119,18 @@ class User(AbstractBaseUser, Base):
         return self.username
 
 class Tag(models.Model):
+    
+    #owner = models.ForeignKey(User) #(Not sure if we want this...)
+    name = models.CharField(max_length=12) #12 seems like a good length? Maybe this should be read from a settings file/model... ah well, we can sort that in a future release ;)
+    labelForeground = RGBColorField(default=randomColor()) #todo: make sure foreground and background don't clash (using magic)
+    labelBackground = RGBColorField(default=randomColor())
+    creationDate = models.DateTimeField(auto_now_add=True) #Now. Might as well log this.
 
     def randomColor():
         decimalValue = random.randint(0,16777215) #16777215 = (16^6)-1, or #FFFFFF in Hex
         hexValue = hex(decimalValue) #Convert to hex... prefixed with 0x, though.
         htmlColour = str(hexValue)[2:] #Convert to String, Strip hexValue of first 2 chars, leaving with 6 digit hex value
         return htmlColour
-
-    #owner = models.ForeignKey(User) #(Not sure if we want this...)
-    name = models.CharField(max_length=12) #12 seems like a good length? Maybe this should be read from a settings file/model... ah well, we can sort that in a future release ;)
-    labelForeground = RGBColorField(default=randomColor()) #todo: make sure foreground and background don't clash (using magic)
-    labelBackground = RGBColorField(default=randomColor())
-    creationDate = models.DateTimeField(auto_now_add=True) #Now. Might as well log this.
 
 class Category(models.Model):
     name = models.CharField(max_length=15) #read from config file/model?
