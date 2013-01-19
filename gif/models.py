@@ -2,6 +2,7 @@ from colorful.fields import RGBColorField
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 from django.contrib.auth.models import User
+from utils import Utils
 import random, uuid
 
 class Base(models.Model):
@@ -120,17 +121,17 @@ class User(AbstractBaseUser, Base):
 
 class Tag(models.Model):
     
-    #owner = models.ForeignKey(User) #(Not sure if we want this...)
-    name = models.CharField(max_length=12) #12 seems like a good length? Maybe this should be read from a settings file/model... ah well, we can sort that in a future release ;)
-    labelForeground = RGBColorField(default=randomColour()) #todo: make sure foreground and background don't clash (using magic)
-    labelBackground = RGBColorField(default=randomColour())
-    creationDate = models.DateTimeField(auto_now_add=True) #Now. Might as well log this.
+    name = models.CharField(max_length=12) #TODO:12 seems like a good length? Maybe this should be read from a settings file/model... ah well, we can sort that in a future release ;)
+    foreground_colour = RGBColorField() #TODO: make sure foreground and background don't clash (using magic)
+    background_colour = RGBColorField()
+    date_created = models.DateTimeField(auto_now_add=True) #Now. Might as well log this.
 
-    def randomColour():
-        decimalValue = random.randint(0,16777215) #16777215 = (16^6)-1, or #FFFFFF in Hex
-        hexValue = hex(decimalValue) #Convert to hex... prefixed with 0x, though.
-        htmlColour = str(hexValue)[2:] #Convert to String, Strip hexValue of first 2 chars, leaving with 6 digit hex value
-        return htmlColour
+    def __init__(self, *args, **kwargs):
+        super(Tag, self).__init__(*args, **kwargs)
+        if (self.background_colour == '' and self.foreground_colour == ''):
+        	colours = Utils.get_colour_pair()
+        	self.background_colour = colours[0]
+        	self.foreground_colour = colours[1]
 
 class Category(models.Model):
     name = models.CharField(max_length=15) #read from config file/model?
