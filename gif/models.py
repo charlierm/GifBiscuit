@@ -1,6 +1,5 @@
 from colorful.fields import RGBColorField
 from django.db import models
-from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 from django.contrib.auth.models import User
 from utils import Utils
 import random, uuid
@@ -35,6 +34,9 @@ class Tag(models.Model):
     background_colour = RGBColorField()
     date_created = models.DateTimeField(auto_now_add=True) #Now. Might as well log this.
 
+    def __unicode__(self):
+        return self.name
+
     def __init__(self, *args, **kwargs):
         super(Tag, self).__init__(*args, **kwargs)
         if (self.background_colour == '' and self.foreground_colour == ''):
@@ -43,10 +45,16 @@ class Tag(models.Model):
         	self.foreground_colour = colours[1]
 
 class Category(models.Model):
-    name = models.CharField(max_length=15) #read from config file/model?
+    name = models.CharField(max_length=15) #read from config file/model
+    
+    def __unicode__(self):
+        return self.name
 
 class Gif(models.Model):
     owner = models.ForeignKey(User)
     tags = models.ManyToManyField(Tag)
     category = models.ForeignKey(Category)
     gifFile = models.FileField(upload_to="gifDir/")
+
+    def __unicode__(self):
+        return self.gifFile.url

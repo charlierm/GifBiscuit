@@ -1,5 +1,8 @@
+*.sqlite
+*.DS_Store
 *.log
 *.pot
 *.pyc
+gifDir*
 local_settings.py
 *.sqlite
