@@ -122,11 +122,11 @@ class Tag(models.Model):
     
     #owner = models.ForeignKey(User) #(Not sure if we want this...)
     name = models.CharField(max_length=12) #12 seems like a good length? Maybe this should be read from a settings file/model... ah well, we can sort that in a future release ;)
-    labelForeground = RGBColorField(default=randomColor()) #todo: make sure foreground and background don't clash (using magic)
-    labelBackground = RGBColorField(default=randomColor())
+    labelForeground = RGBColorField(default=randomColour()) #todo: make sure foreground and background don't clash (using magic)
+    labelBackground = RGBColorField(default=randomColour())
     creationDate = models.DateTimeField(auto_now_add=True) #Now. Might as well log this.
 
-    def randomColor():
+    def randomColour():
         decimalValue = random.randint(0,16777215) #16777215 = (16^6)-1, or #FFFFFF in Hex
         hexValue = hex(decimalValue) #Convert to hex... prefixed with 0x, though.
         htmlColour = str(hexValue)[2:] #Convert to String, Strip hexValue of first 2 chars, leaving with 6 digit hex value
