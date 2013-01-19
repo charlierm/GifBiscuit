@@ -91,6 +91,8 @@ class User(AbstractBaseUser, Base):
     email_address = models.EmailField(max_length=75)
     ##Whether the user account is active
     is_active = models.BooleanField(default=True)
+    ##Whether the user has super user rights
+    is_superuser = models.BooleanField(default=False)
     
     USERNAME_FIELD = 'username'
     REQUIRED_FIELDS = ['email_address']
@@ -118,6 +120,19 @@ class User(AbstractBaseUser, Base):
         Returns the users username.
         """
         return self.username
+       
+	def has_perm(self, perm, obj=None):
+        # Handle whether the user has a specific permission?"
+		return True
+ 
+    def has_module_perms(self, app_label):
+        # Handle whether the user has permissions to view the app `app_label`?"
+        return True
+    
+    @property
+    def is_staff(self):
+        # Handle whether the user is a member of staff?"
+        return self.is_superuser
 
 class Tag(models.Model):
     
